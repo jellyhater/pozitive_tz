@@ -17,6 +17,7 @@ services:
       args:
         - DB_PORT=5432
         - SERVER_PORT=8000
+        - POSTGRES_LOGGING=True
     depends_on:
       - database  
     networks: 

@@ -6,8 +6,6 @@ from fastapi import FastAPI
 from model import Model
 from pydantic import BaseModel, RootModel, model_serializer
 import uvicorn
-import sqlalchemy
-
 from db_utils import Database
 from config import Config
 
@@ -68,7 +66,7 @@ def read_item(item_list: ItemList):
 @app.get("/history")
 def get_queries():
     db = Database(db_port=config.db_port)
-    result = db.engine.execute(f"SELECT * FROM requests;").mappings().all() if session else {"status": "fail"}
+    result = db.select()
     return result
 
 

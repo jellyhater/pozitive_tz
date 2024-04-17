@@ -1,6 +1,6 @@
 import argparse
 
-from sqlalchemy import create_engine, Column, Integer, String, inspect
+from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.ext.declarative import declarative_base
@@ -52,6 +52,10 @@ class Database:
             except sqlalchemy.exc.IntegrityError:
                 print(f"Event id {event_id} already exists; skip logging stage")
 
+    def select(self):
+        with self.engine.connect() as conn:
+            result = conn.execute(text(f"SELECT * FROM requests;")).mappings().all()
+        return result
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
