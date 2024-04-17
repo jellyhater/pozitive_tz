@@ -1,6 +1,6 @@
 import argparse
 
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, inspect
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.ext.declarative import declarative_base
@@ -19,6 +19,7 @@ class Requests(Base):
     matched_variable_src = Column(String)
     matched_variable_name = Column(String)
     matched_variable_value = Column(String)
+    label_pred = Column(Integer)
 
 
 def run_session(db_port):
@@ -29,7 +30,7 @@ def run_session(db_port):
 
 
 def insert(db_session, event_id, client_ip=None, client_useragent=None, request_size=None, response_code=None,
-           matched_variable_src=None, matched_variable_name=None, matched_variable_value=None):
+           matched_variable_src=None, matched_variable_name=None, matched_variable_value=None, label_pred=None):
 
     with db_session() as session:
         session.add(
@@ -42,6 +43,7 @@ def insert(db_session, event_id, client_ip=None, client_useragent=None, request_
                 matched_variable_src=matched_variable_src,
                 matched_variable_name=matched_variable_name,
                 matched_variable_value=matched_variable_value,
+                label_pred=label_pred
             )
         )
         session.commit()
