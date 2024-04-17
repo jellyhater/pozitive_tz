@@ -8,3 +8,8 @@ class Config:
     def __init__(self):
         self.db_port = int(os.getenv("DB_PORT"))
         self.server_port = int(os.getenv("SERVER_PORT"))
+
+    @property
+    def postgres_logging(self):
+        return os.getenv("POSTGRES_LOGGING") not in ["False", "false", 0, ""]
+

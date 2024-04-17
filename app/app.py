@@ -8,7 +8,7 @@ from pydantic import BaseModel, RootModel, model_serializer
 import uvicorn
 import sqlalchemy
 
-from db import run_session, insert
+from db_utils import Database
 from config import Config
 
 
@@ -43,24 +43,33 @@ def read_root():
 
 @app.post("/predict")
 def read_item(item_list: ItemList):
-    session = run_session(db_port=config.db_port)
+    # init db connection if flag True
+    db = Database(db_port=config.db_port) if config.postgres_logging else None
+    # jsonify Item objects
     item_list = [item.model_dump(mode='json') for item in item_list]
+
     for item in item_list:
+        # get prediction
         item["LABEL_PRED"] = model.predict(**item)
-        if session:
-            try:
-                insert(
-                    db_session=session,
+        # insert if db initialized
+        if db:
+            db.insert(
                     event_id=item["EVENT_ID"],
                     client_ip=item["CLIENT_IP"],
                     label_pred=item["LABEL_PRED"]
-                )
-            except sqlalchemy.exc.IntegrityError:
-                print(f"Event id {item['EVENT_ID']} already exists; skip logging stage")
+            )
+
     return [{
         "EVENT_ID": item["EVENT_ID"],
         "LABEL_PRED": item["LABEL_PRED"]
     } for item in item_list]
+
+
+@app.get("/history")
+def get_queries():
+    db = Database(db_port=config.db_port)
+    result = db.engine.execute(f"SELECT * FROM requests;").mappings().all() if session else {"status": "fail"}
+    return result
 
 
 if __name__ == "__main__":
