@@ -59,15 +59,4 @@ def read_item(item_list: ItemList):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--db_port',
-                        default=5432,
-                        type=int,
-                        help='database port, 5432 by default')
-    parser.add_argument('--server_port',
-                        default=8000,
-                        type=int,
-                        help='server port, 8000 by default')
-    args = parser.parse_args()
-
-    uvicorn.run("app:app", host='127.0.0.1', port=args.server_port, reload=True)
+    uvicorn.run("app:app", host='127.0.0.1', port=config.server_port, reload=True)
