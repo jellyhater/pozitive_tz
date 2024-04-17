@@ -42,7 +42,8 @@ def read_root():
 @app.post("/predict")
 def read_item(item_list: ItemList):
     # init db connection if flag True
-    db = Database(db_port=config.db_port) if config.postgres_logging else None
+    db = Database(db_port=config.db_port, user=config.postgres_user, password=config.postgres_password) \
+        if config.postgres_logging else None
     # jsonify Item objects
     item_list = [item.model_dump(mode='json') for item in item_list]
 
@@ -65,7 +66,8 @@ def read_item(item_list: ItemList):
 
 @app.get("/history")
 def get_queries():
-    db = Database(db_port=config.db_port)
+    db = Database(db_port=config.db_port, user=config.postgres_user, password=config.postgres_password) \
+        if config.postgres_logging else None
     result = db.select()
     return result
 

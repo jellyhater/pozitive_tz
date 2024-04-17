@@ -10,14 +10,15 @@ services:
     networks: 
       - backend
 
-
   app:
     build:
       context: ./app
-      args:
-        - DB_PORT=5432
-        - SERVER_PORT=8000
-        - POSTGRES_LOGGING=True
+    environment:
+      - DB_PORT=5432
+      - SERVER_PORT=8000
+      - POSTGRES_LOGGING=True
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
       - database  
     networks: 

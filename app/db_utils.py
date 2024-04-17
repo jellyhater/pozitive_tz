@@ -25,8 +25,8 @@ class Requests(Base):
 
 class Database:
 
-    def __init__(self, db_port):
-        self.engine = create_engine(f'postgresql+psycopg2://postgres:postgres@database:{db_port}/postgres')
+    def __init__(self, db_port, user="postgres", password="postgres"):
+        self.engine = create_engine(f'postgresql+psycopg2://{user}:{password}@database:{db_port}/postgres')
         self.session = sessionmaker(bind=self.engine)
         Base.metadata.create_all(self.engine)
 
@@ -56,6 +56,7 @@ class Database:
         with self.engine.connect() as conn:
             result = conn.execute(text(f"SELECT * FROM requests;")).mappings().all()
         return result
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
