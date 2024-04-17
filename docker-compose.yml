@@ -1,0 +1,30 @@
+services:
+  database:
+    image: postgres
+    restart: always
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    networks: 
+      - backend
+
+
+  app:
+    build:
+      context: ./app
+      args:
+        - DB_PORT=5432
+        - SERVER_PORT=8000
+    depends_on:
+      - database  
+    networks: 
+      - backend
+
+#bridge network
+networks:
+  backend:
+
+
+
