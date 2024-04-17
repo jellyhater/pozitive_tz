@@ -23,10 +23,13 @@ class Requests(Base):
 
 
 def run_session(db_port):
-    engine = create_engine(f'postgresql+psycopg2://postgres:postgres@database:{db_port}/postgres')
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-    return Session
+    try:
+        engine = create_engine(f'postgresql+psycopg2://postgres:postgres@database:{db_port}/postgres')
+        Base.metadata.create_all(engine)
+        Session = sessionmaker(bind=engine)
+        return Session
+    except:
+        return 0
 
 
 def insert(db_session, event_id, client_ip=None, client_useragent=None, request_size=None, response_code=None,
