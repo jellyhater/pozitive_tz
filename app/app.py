@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from model import Model
 from pydantic import BaseModel, RootModel, model_serializer
 import uvicorn
+import sqlalchemy
 
 from db import run_session, insert
 from config import Config
@@ -46,12 +47,16 @@ def read_item(item_list: ItemList):
     item_list = [item.model_dump(mode='json') for item in item_list]
     for item in item_list:
         item["LABEL_PRED"] = model.predict(**item)
-        insert(
-            db_session=session,
-            event_id=item["EVENT_ID"],
-            client_ip=item["CLIENT_IP"],
-            label_pred=item["LABEL_PRED"]
-        )
+        if session:
+            try:
+                insert(
+                    db_session=session,
+                    event_id=item["EVENT_ID"],
+                    client_ip=item["CLIENT_IP"],
+                    label_pred=item["LABEL_PRED"]
+                )
+            except sqlalchemy.exc.IntegrityError:
+                print(f"Event id {item['EVENT_ID']} already exists; skip logging stage")
     return [{
         "EVENT_ID": item["EVENT_ID"],
         "LABEL_PRED": item["LABEL_PRED"]
@@ -59,15 +64,4 @@ def read_item(item_list: ItemList):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--db_port',
-                        default=5432,
-                        type=int,
-                        help='database port, 5432 by default')
-    parser.add_argument('--server_port',
-                        default=8000,
-                        type=int,
-                        help='server port, 8000 by default')
-    args = parser.parse_args()
-
-    uvicorn.run("app:app", host='127.0.0.1', port=args.server_port, reload=True)
+    uvicorn.run("app:app", host='127.0.0.1', port=config.server_port, reload=True)
