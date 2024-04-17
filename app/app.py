@@ -7,7 +7,9 @@ from model import Model
 from pydantic import BaseModel, RootModel, model_serializer
 import uvicorn
 
-from db_utils import insert_request
+from db import run_session, insert
+from config import Config
+
 
 class Item(BaseModel):
     data: str
@@ -30,6 +32,7 @@ class ItemList(RootModel):
 
 app = FastAPI()
 model = Model(1, 2, 3)
+config = Config()
 
 
 @app.get("/")
@@ -39,7 +42,14 @@ def read_root():
 
 @app.post("/predict")
 def read_item(item_list: ItemList):
+    session = run_session(db_port=config.db_port)
     item_list = [item.model_dump(mode='json') for item in item_list]
+    for item in item_list:
+        insert(
+            db_session=session,
+            event_id=item["EVENT_ID"],
+            client_ip=item["CLIENT_IP"]
+        )
     return [{
         "EVENT_ID": item["EVENT_ID"],
         "LABEL_PRED": model.predict(**item)
@@ -57,4 +67,5 @@ if __name__ == "__main__":
                         type=int,
                         help='server port, 8000 by default')
     args = parser.parse_args()
+
     uvicorn.run("app:app", host='127.0.0.1', port=args.server_port, reload=True)
