@@ -4,4 +4,4 @@ class Model:
         pass
 
     def predict(self, **kwargs):
-        return kwargs.get("REQUEST_SIZE")
+        return 1

@@ -28,12 +28,12 @@ services:
     build:
       context: ./filler
       args:
-        - DATA_DIR=/data
+        - DATA_DIR=/filler/data
         - DB_PORT=5432
     volumes:
-        - ./data:/data
+        - ./data:/filler/data
     depends_on:
-      - database  
+      - app  
     networks: 
       - backend
 

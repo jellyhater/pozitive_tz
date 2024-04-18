@@ -53,9 +53,9 @@ def read_item(item_list: ItemList):
         # insert if db initialized
         if db:
             db.insert(
-                    event_id=item["EVENT_ID"],
-                    client_ip=item["CLIENT_IP"],
-                    label_pred=item["LABEL_PRED"]
+                event_id=item["EVENT_ID"],
+                client_ip=item["CLIENT_IP"],
+                label_pred=item["LABEL_PRED"]
             )
 
     return [{
@@ -73,4 +73,4 @@ def get_queries():
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host='127.0.0.1', port=config.server_port, reload=True)
+    uvicorn.run("app:app", host='app', port=config.server_port, reload=True)
