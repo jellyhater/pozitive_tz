@@ -19,6 +19,8 @@ services:
       - POSTGRES_LOGGING=True
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - '8000:8000'
     depends_on:
       - database  
     networks: 

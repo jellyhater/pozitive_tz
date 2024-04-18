@@ -40,7 +40,7 @@ if __name__ == "__main__":
             json_data = resp.json()
             # write predictions to csv
             headers = json_data[0].keys()
-            output_csv = f'{Path(data_dir, table_name)}.csv'
+            output_csv = f'{Path(data_dir, "output", table_name)}.csv'
             with open(output_csv, 'w', newline='\n') as f:
                 writer = csv.DictWriter(f, fieldnames=headers)
                 writer.writeheader()
