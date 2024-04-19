@@ -16,6 +16,7 @@ services:
     environment:
       - DB_PORT=5432
       - SERVER_PORT=8000
+      - SERVER_HOST=app
       - POSTGRES_LOGGING=True
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
