@@ -2,15 +2,21 @@ FROM python:3
 
 ARG DB_PORT
 ARG SERVER_PORT
+ARG POSTGRES_LOGGING
+ARG POSTGRES_USER
+ARG POSTGRES_PASSWORD
 
 ENV DB_PORT ${DB_PORT}
 ENV SERVER_PORT ${SERVER_PORT}
+ENV POSTGRES_LOGGING ${POSTGRES_LOGGING}
+ENV POSTGRES_USER ${POSTGRES_USER}
+ENV POSTGRES_PASSWORD ${POSTGRES_PASSWORD}
 
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 COPY app.py /app/app.py
 COPY model.py /app/model.py
-COPY db.py /app/db.py
+COPY db_utils.py /app/db_utils.py
 COPY config.py /app/config.py
 
 RUN pip install --no-cache-dir -r /app/requirements.txt

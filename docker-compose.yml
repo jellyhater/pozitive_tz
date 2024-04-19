@@ -10,13 +10,17 @@ services:
     networks: 
       - backend
 
-
   app:
     build:
       context: ./app
-      args:
-        - DB_PORT=5432
-        - SERVER_PORT=8000
+    environment:
+      - DB_PORT=5432
+      - SERVER_PORT=8000
+      - POSTGRES_LOGGING=True
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '8000:8000'
     depends_on:
       - database  
     networks: 
@@ -26,12 +30,12 @@ services:
     build:
       context: ./filler
       args:
-        - DATA_DIR=/data
+        - DATA_DIR=/filler/data
         - DB_PORT=5432
     volumes:
-        - ./data:/data
+        - ./data:/filler/data
     depends_on:
-      - database  
+      - app  
     networks: 
       - backend
 
