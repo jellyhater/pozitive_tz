@@ -73,4 +73,4 @@ def get_queries():
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host='app', port=config.server_port, reload=True)
+    uvicorn.run("app:app", host=config.server_host, port=config.server_port, reload=True)
