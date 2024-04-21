@@ -3,26 +3,26 @@ FROM python:3
 ARG DB_PORT
 ARG SERVER_PORT
 ARG SERVER_HOST 
-
 ARG POSTGRES_LOGGING
 ARG POSTGRES_USER
 ARG POSTGRES_PASSWORD
+ARG MODEL_PATH
 
 ENV DB_PORT ${DB_PORT}
 ENV SERVER_PORT ${SERVER_PORT}
 ENV SERVER_HOST ${SERVER_HOST}
-
 ENV POSTGRES_LOGGING ${POSTGRES_LOGGING}
 ENV POSTGRES_USER ${POSTGRES_USER}
 ENV POSTGRES_PASSWORD ${POSTGRES_PASSWORD}
+ENV MODEL_PATH ${MODEL_PATH}
 
 WORKDIR /app
+COPY model /app/model
 COPY requirements.txt /app/requirements.txt
-COPY app.py /app/app.py
-COPY model.py /app/model.py
+COPY main.py /app/main.py
 COPY db_utils.py /app/db_utils.py
 COPY config.py /app/config.py
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-CMD python3 /app/app.py
+CMD python3 /app/main.py
