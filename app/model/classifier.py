@@ -7,7 +7,7 @@ class HTTPRequestClassifier:
         with open(weights_path, 'rb') as f:
             self.clf = pickle.load(f)
 
-    def __call__(self, item):
-        features = preprocess_item(item)
+    def __call__(self, sample):
+        features = preprocess_item(sample)
         label = self.clf.predict(features)[0].item()
         return label
