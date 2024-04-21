@@ -69,3 +69,8 @@ To get all database logs (if any), you can:
     - optionally you can check that table was initialized: `\d` command must return "requests" table
     - run `SELECT * FROM requests;`
 
+## Part 3: attracting attention
+
+![image](imgs/kitten.jpeg)
+
+Thanks for attention c:
