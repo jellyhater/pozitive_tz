@@ -20,6 +20,7 @@ services:
       - POSTGRES_LOGGING=True
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - MODEL_PATH=/app/model/weights/svm.pkl
     ports:
       - '8000:8000'
     depends_on:

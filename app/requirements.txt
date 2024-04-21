@@ -3,3 +3,6 @@ fastapi
 uvicorn
 psycopg2-binary
 python-dotenv
+scikit-learn
+pandas
+numpy

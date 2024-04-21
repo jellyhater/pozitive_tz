@@ -12,8 +12,8 @@ class Config:
 
         self.postgres_user = os.getenv("POSTGRES_USER")
         self.postgres_password = os.getenv("POSTGRES_PASSWORD")
+        self.postgres_logging = os.getenv("POSTGRES_LOGGING") not in ["False", "false", 0, ""]
 
-    @property
-    def postgres_logging(self):
-        return os.getenv("POSTGRES_LOGGING") not in ["False", "false", 0, ""]
+        self.model_path = os.getenv("MODEL_PATH")
+
 

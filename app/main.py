@@ -3,7 +3,7 @@ import json
 import argparse
 
 from fastapi import FastAPI
-from model import Model
+from model import HTTPRequestClassifier
 from pydantic import BaseModel, RootModel, model_serializer
 import uvicorn
 from db_utils import Database
@@ -30,7 +30,9 @@ class ItemList(RootModel):
 
 
 app = FastAPI()
-model = Model(1, 2, 3)
+model = HTTPRequestClassifier(
+    weights_path="./model/weights/svm.pkl"
+)
 config = Config()
 
 
@@ -49,12 +51,18 @@ def read_item(item_list: ItemList):
 
     for item in item_list:
         # get prediction
-        item["LABEL_PRED"] = model.predict(**item)
+        item["LABEL_PRED"] = model(item)
         # insert if db initialized
         if db:
             db.insert(
                 event_id=item["EVENT_ID"],
                 client_ip=item["CLIENT_IP"],
+                client_useragent=item["CLIENT_USERAGENT"],
+                request_size=item["REQUEST_SIZE"],
+                response_code=item["RESPONSE_CODE"],
+                matched_variable_src=item["MATCHED_VARIABLE_SRC"],
+                matched_variable_name=item["MATCHED_VARIABLE_NAME"],
+                matched_variable_value=item["MATCHED_VARIABLE_VALUE"],
                 label_pred=item["LABEL_PRED"]
             )
 
@@ -73,4 +81,4 @@ def get_queries():
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host=config.server_host, port=config.server_port, reload=True)
+    uvicorn.run("main:app", host=config.server_host, port=config.server_port, reload=True)
