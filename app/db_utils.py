@@ -15,8 +15,8 @@ class Requests(Base):
     event_id = Column(String, primary_key=True)
     client_ip = Column(String)
     client_useragent = Column(String)
-    request_size = Column(Integer)
-    response_code = Column(Integer)
+    request_size = Column(String)
+    response_code = Column(String)
     matched_variable_src = Column(String)
     matched_variable_name = Column(String)
     matched_variable_value = Column(String)
@@ -39,8 +39,8 @@ class Database:
                         event_id=event_id,
                         client_ip=client_ip,
                         client_useragent=client_useragent,
-                        request_size=request_size if type(request_size) == int else None,
-                        response_code=response_code if type(response_code) == int else None,
+                        request_size=request_size,
+                        response_code=response_code,
                         matched_variable_src=matched_variable_src,
                         matched_variable_name=matched_variable_name,
                         matched_variable_value=matched_variable_value,
